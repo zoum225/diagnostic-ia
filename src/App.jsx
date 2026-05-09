@@ -361,17 +361,37 @@ function MobileStepBar({ step, setStep, progress }) {
   return (
     <div className="lg:hidden">
       <div className="mb-4 rounded-3xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-xl">
-        <div className="mb-3 flex items-center justify-between text-xs"><span className="font-bold text-slate-300">Étape {step} sur {steps.length}</span><span className="font-black text-cyan-200">{progress}%</span></div>
-        <div className="h-2 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-violet-500 transition-all duration-500" style={{ width: `${progress}%` }} /></div>
-      </div>
-      <div className="-mx-4 mb-5 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="flex min-w-max gap-2">
-          {steps.map((item) => {
-            const active = item.id === step;
-            const done = item.id < step;
-            return <button key={item.id} type="button" onClick={() => setStep(item.id)} className={cn("flex items-center gap-2 rounded-2xl border px-3 py-2 text-left transition active:scale-[0.98]", active ? "border-cyan-400 bg-cyan-400/15" : done ? "border-emerald-400/20 bg-emerald-400/10" : "border-white/10 bg-white/5")}><span className={cn("flex h-8 w-8 items-center justify-center rounded-xl text-[11px] font-black", active ? "bg-cyan-400 text-slate-950" : done ? "bg-emerald-400/20 text-emerald-100" : "bg-white/10 text-slate-300")}>{done ? "OK" : item.code}</span><span><span className="block text-xs font-black text-white">{item.title}</span><span className="block text-[11px] text-slate-400">{item.subtitle}</span></span></button>;
-          })}
+        <div className="mb-3 flex items-center justify-between text-xs">
+          <span className="font-bold text-slate-300">Étape {step} sur {steps.length}</span>
+          <span className="font-black text-cyan-200">{progress}%</span>
         </div>
+        <div className="h-2 overflow-hidden rounded-full bg-white/10">
+          <div className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-violet-500 transition-all duration-500" style={{ width: `${progress}%` }} />
+        </div>
+      </div>
+
+      <div className="mb-5 grid grid-cols-3 gap-2 sm:grid-cols-6">
+        {steps.map((item) => {
+          const active = item.id === step;
+          const done = item.id < step;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setStep(item.id)}
+              className={cn(
+                "min-h-[64px] rounded-2xl border p-2 text-left transition active:scale-[0.98]",
+                active ? "border-cyan-400 bg-cyan-400/15" : done ? "border-emerald-400/20 bg-emerald-400/10" : "border-white/10 bg-white/5"
+              )}
+            >
+              <span className={cn("mb-1 flex h-7 w-7 items-center justify-center rounded-xl text-[10px] font-black", active ? "bg-cyan-400 text-slate-950" : done ? "bg-emerald-400/20 text-emerald-100" : "bg-white/10 text-slate-300")}>
+                {done ? "OK" : item.code}
+              </span>
+              <span className="block truncate text-[11px] font-black text-white">{item.title}</span>
+              <span className="block truncate text-[10px] text-slate-400">{item.subtitle}</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -413,9 +433,9 @@ export default function App() {
   const sendToWhatsapp = () => window.open(whatsappLink, "_blank", "noopener,noreferrer");
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen w-full overflow-x-hidden bg-slate-950 text-white">
       <div className="pointer-events-none fixed inset-0 overflow-hidden"><div className="absolute -left-32 top-0 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl" /><div className="absolute right-0 top-24 h-[28rem] w-[28rem] rounded-full bg-violet-600/20 blur-3xl" /><div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-orange-500/10 blur-3xl" /></div>
-      <main className="relative mx-auto grid max-w-7xl gap-5 px-4 py-4 pb-24 sm:gap-6 sm:py-6 lg:grid-cols-[360px_1fr] lg:px-8 lg:pb-6">
+      <main className="relative mx-auto grid w-full max-w-7xl gap-5 px-4 py-4 pb-24 sm:gap-6 sm:py-6 lg:grid-cols-[360px_1fr] lg:px-8 lg:pb-6">
         <DesktopSidebar step={step} setStep={setStep} progress={progress} />
         <section className="min-h-[calc(100vh-2rem)] rounded-3xl border border-white/10 bg-white/[0.06] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl sm:rounded-[2rem] sm:p-6 md:p-8 lg:min-h-[calc(100vh-3rem)]">
           <MobileStepBar step={step} setStep={setStep} progress={progress} />
